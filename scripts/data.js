@@ -75,6 +75,7 @@ function retrieve(url){
         });
         $("#pokemonTypes").html(typeBadges);
 
+        // abilities list
         var abilitiesHTML ="";
         res.abilities.forEach(_data=>{
             abilitiesHTML += `
@@ -127,6 +128,7 @@ function retrieve(url){
         `;
         $("#nav-stats").html(tabStats);
 
+        // stats progress bar
         let statsHtml = "";
         res.stats.forEach((_data, index)=>{
             // filling the table body
