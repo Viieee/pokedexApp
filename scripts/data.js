@@ -1,25 +1,59 @@
-$.ajax({
-    url:"https://pokeapi.co/api/v2/pokemon/"
-})
-.done(res=>{
-    // returns array of objects
-    console.log(res.results);
-    let html = "";
-    res.results.forEach((_data, index)=>{
-        // filling the table body
-        html += `
-            <tr>
-                <td>${index+1}</td>
-                <td>${_data.name}</td>
-                <td>
-                    <button type="button" onClick="retrieve('${_data.url}')" class="btn btn-primary" data-toggle="modal" data-target="#pokemonDetail">Details</button>
-                </td>
-            </tr>
-        `
+// $.ajax({
+//     url:"https://pokeapi.co/api/v2/pokemon/"
+// })
+// .done(res=>{
+//     // returns array of objects
+//     console.log(res.results);
+//     let html = "";
+//     res.results.forEach((_data, index)=>{
+//         // filling the table body
+//         html += `
+//             <tr>
+//                 <td>${index+1}</td>
+//                 <td>${_data.name}</td>
+//                 <td>
+//                     <button type="button" onClick="retrieve('${_data.url}')" class="btn btn-primary" data-toggle="modal" data-target="#pokemonDetail">Details</button>
+//                 </td>
+//             </tr>
+//         `
+//     });
+//     $("#tBodyPokedex").html(html);
+// })
+// .fail(err=>console.log(err))
+
+$(document).ready(function(){
+    //akan dijalankan saat DOCUMENT/HTML selesai di load (ready)
+    $("#dataTableSW").DataTable({
+        "ajax": { 
+            url: "https://pokeapi.co/api/v2/pokemon/", 
+            type: "GET",
+            dataSrc: "results",
+            dataType: "JSON"
+        },
+        "columns": [
+            {
+                "data": null,
+                "render": function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }
+            },
+            {
+                "data": "",
+                "render": function ( data, type, row ) {
+                    // return  `Rp. ${row.name}`;
+                    return  `${row.name}`;
+                }
+            },
+            {
+                "data": "",
+                "render": function ( data, type, row ) {
+                    // row represents all the data returned
+                    return  `<button type="button" onClick="retrieve('${row.url}')" class="btn btn-primary" data-toggle="modal" data-target="#pokemonDetail">Details</button>`;
+                }
+            }
+        ]
     });
-    $("#tBodyPokedex").html(html);
-})
-.fail(err=>console.log(err))
+});
 
 
 // when the detail button clicked this function will run
@@ -29,7 +63,7 @@ function retrieve(url){
     })
     .done(res=>{
         console.log(res);
-
+        // form validation (required) bootstrap, child row datatables, button export datatables, tooltip bootstrap, sweet alert, Bfrtip, apex chart
         // the whole details
         let html = `
             <img class="rounded mx-auto d-block" style="width: 250px;" src="${res.sprites.other["official-artwork"].front_default}">
